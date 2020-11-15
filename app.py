@@ -28,8 +28,11 @@ def welcome():
     """List all available api routes."""
     return (
         f"Available Routes:<br/>"
-        f"/api/v1.0/names<br/>"
-        f"/api/v1.0/passengers"
+        f"/api/v1.0/precipitation<br/>"
+        f"/api/v1.0/stations<br/>"
+        f"/api/v1.0/tobs<br/>"
+        f"/api/v1.0/<start><br/>"
+        f"/api/v1.0/<start>/<end>"
     )
 
 @app.route("/api/v1.0/precipitation")
@@ -39,7 +42,7 @@ def precipitation():
 
     """Return a list of all passenger names"""
     # Query all passengers
-    results = session.query(Passenger.name).all()
+    results = session.query(Measurement.date)func.sum(Measurement.date).all()
 
     session.close()
 
@@ -55,11 +58,59 @@ def stations():
 
     """Return a list of all passenger names"""
     # Query all passengers
-    results = session.query(Passenger.name).all()
+    results = session.query(Station.station).all()
 
     session.close()
 
     # Convert list of tuples into normal list
-    all_names = list(np.ravel(results))
+    station_names = list(np.ravel(results))
 
-    return jsonify(all_names)
+    return jsonify(station_names)
+
+@app.route("/api/v1.0/tobs")
+def observations():
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
+
+    """Return a list of all passenger names"""
+    # Query all passengers
+    results = session.query(Station.station).all()
+
+    session.close()
+
+    # Convert list of tuples into normal list
+    station_names = list(np.ravel(results))
+
+    return jsonify(station_names)
+
+@app.route("/api/v1.0/<start>")
+def stations():
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
+
+    """Return a list of all passenger names"""
+    # Query all passengers
+    results = session.query(Station.station).all()
+
+    session.close()
+
+    # Convert list of tuples into normal list
+    station_names = list(np.ravel(results))
+
+    return jsonify(station_names)
+
+@app.route("/api/v1.0/<start>/<end>")
+def stations():
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
+
+    """Return a list of all passenger names"""
+    # Query all passengers
+    results = session.query(Station.station).all()
+
+    session.close()
+
+    # Convert list of tuples into normal list
+    station_names = list(np.ravel(results))
+
+    return jsonify(station_names)
